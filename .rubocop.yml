@@ -28,3 +28,6 @@ Metrics/MethodLength:
 
 Metrics/ParameterLists:
   Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false

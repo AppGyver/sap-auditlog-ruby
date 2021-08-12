@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
 require "sap/auditlog"
+require "sap/auditlog/message"
+require "sap/auditlog/access_message"
+
+require "time"
+require "timecop"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
@@ -12,4 +17,6 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
+
+  Timecop.safe_mode = true
 end
