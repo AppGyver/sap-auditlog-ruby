@@ -5,7 +5,7 @@ module Sap
     # See also
     # https://www.npmjs.com/package/@sap/audit-logging#data-access-messages-1
     class AccessMessage < Message
-      attr_reader :attachments
+      attr_reader :attachments, :access_channel
 
       def initialize(object:)
         super(kind: "data-accesses", object: object)
@@ -19,7 +19,8 @@ module Sap
             object: object,
             attributes: attributes,
             data_subjects: data_subjects,
-            attachments: attachments
+            attachments: attachments,
+            channel: access_channel
           }
         )
       end
@@ -39,6 +40,12 @@ module Sap
         msg[:name] = name if name
 
         @attachments << msg
+
+        self
+      end
+
+      def access_channel!(name)
+        @access_channel = name
 
         self
       end

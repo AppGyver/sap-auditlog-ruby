@@ -165,7 +165,6 @@ RSpec.describe Sap::Auditlog::Message do
             .attribute!(name: "attr2")
             .data_subject!(type: "type", id: "id")
             .data_subject!(type: "type2", id: "id2")
-            .access_channel!("channel")
             .tenant!("tenant")
             .by!("actor")
             .external_ip!("ip")

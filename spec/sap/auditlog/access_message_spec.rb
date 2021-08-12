@@ -49,6 +49,7 @@ RSpec.describe Sap::Auditlog::AccessMessage do
       let(:data_subject1) { { type: "test type", id: "test id" } }
       let(:attachment1) { { id: "attachment1" } }
       let(:attachment2) { { id: "attachment2" } }
+      let(:access_channel) { "mock access channel" }
 
       before do
         allow(subject)
@@ -62,6 +63,7 @@ RSpec.describe Sap::Auditlog::AccessMessage do
           .data_subject!(data_subject1)
           .attachment!(attachment1)
           .attachment!(attachment2)
+          .access_channel!(access_channel)
 
         expect(subject.payload).to eq(
           {
@@ -69,7 +71,8 @@ RSpec.describe Sap::Auditlog::AccessMessage do
             object: object,
             attributes: [attr1],
             data_subjects: [data_subject1],
-            attachments: [attachment1, attachment2]
+            attachments: [attachment1, attachment2],
+            channel: access_channel
           }
         )
       end

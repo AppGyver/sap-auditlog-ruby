@@ -49,12 +49,6 @@ module Sap
         self
       end
 
-      def access_channel!(name)
-        @access_channel = name
-
-        self
-      end
-
       def tenant!(tenant_id)
         @tenant = tenant_id
 
