@@ -18,8 +18,8 @@ RSpec.describe Sap::Auditlog::SecurityMessage do
     let(:subject) { described_class.new(object: object) }
 
     let(:common_payload) { { mock: "common payload" } }
-    let(:data_subject1) { { type: "test type", id: "test id" } }
     let(:ip) { "127.0.0.1" }
+
     before do
       allow(subject)
         .to receive(:common_payload)
@@ -29,14 +29,12 @@ RSpec.describe Sap::Auditlog::SecurityMessage do
     it "has payload specific to its kind" do
       subject
         .external_ip!(ip)
-        .data_subject!(data_subject1)
 
       expect(subject.payload).to eq(
         MultiJson.dump(
           {
             mock: "common payload",
             data: object,
-            data_subjects: [data_subject1],
             ip: ip
           }
         )

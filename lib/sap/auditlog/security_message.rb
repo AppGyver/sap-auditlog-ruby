@@ -18,7 +18,6 @@ module Sap
           common_payload.merge(
             {
               data: object,
-              data_subjects: data_subjects,
               ip: external_ip
             }
           )
