@@ -25,6 +25,7 @@ RSpec.describe Sap::Auditlog::ModificationMessage do
       let(:common_payload) { { mock: "common payload" } }
       let(:attr1) { { name: "attr1" } }
       let(:data_subject1) { { type: "test type", id: "test id" } }
+      let(:data_subject2) { { type: "test type 2", id: "test id 2" } }
 
       before do
         allow(subject)
@@ -43,10 +44,21 @@ RSpec.describe Sap::Auditlog::ModificationMessage do
               mock: "common payload",
               object: object,
               attributes: [attr1],
-              data_subjects: [data_subject1]
+              data_subject: data_subject1
             }
           )
         )
+      end
+
+      it "accepts only a single data subject" do
+        subject
+          .data_subject!(data_subject1)
+          .data_subject!(data_subject2)
+          .attribute!(attr1)
+
+          expect do
+            subject.payload
+          end.to raise_error Sap::Auditlog::Message::InvalidPayloadError
       end
     end
   end

@@ -19,7 +19,7 @@ module Sap
             {
               object: object,
               attributes: attributes,
-              data_subjects: data_subjects
+              data_subject: data_subjects.first
             }
           )
         )
@@ -27,8 +27,15 @@ module Sap
 
       def valid?
         validate_common_object
+        validate_data_subject
 
         super
+      end
+
+      private
+
+      def validate_data_subject
+        validation_error! "#{self.class} can only have a single 'data_subject'" unless data_subjects.size == 1
       end
     end
   end

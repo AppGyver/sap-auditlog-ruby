@@ -12,7 +12,7 @@ RSpec.describe Sap::Auditlog::Message do
     end
   end
 
-  describe "#attribute" do
+  describe "#attribute!" do
     let(:kind) { "read" }
     let(:object) { "some_object" }
 
@@ -107,7 +107,7 @@ RSpec.describe Sap::Auditlog::Message do
       end
     end
 
-    describe "#data_subject" do
+    describe "#data_subject!" do
       let(:kind) { "some_kind" }
       let(:object) { "some_object" }
       let(:type1) { "student" }
@@ -179,7 +179,7 @@ RSpec.describe Sap::Auditlog::Message do
     end
   end
 
-  describe "#tenant" do
+  describe "#tenant!" do
     let(:kind) { "any_kind" }
     let(:object) { "any_object" }
     let(:subject) { described_class.new(kind: kind, object: object) }
@@ -196,7 +196,7 @@ RSpec.describe Sap::Auditlog::Message do
     end
   end
 
-  describe "#by" do
+  describe "#by!" do
     let(:kind) { "any_kind" }
     let(:object) { "any_object" }
     let(:subject) { described_class.new(kind: kind, object: object) }
