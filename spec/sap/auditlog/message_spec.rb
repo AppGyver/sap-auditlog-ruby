@@ -167,7 +167,6 @@ RSpec.describe Sap::Auditlog::Message do
             .data_subject!(type: "type2", id: "id2")
             .tenant!("tenant")
             .by!("actor")
-            .external_ip!("ip")
         ).to eq subject
       end
     end

@@ -1,32 +1,25 @@
 # frozen_string_literal: true
 
-RSpec.describe Sap::Auditlog::ConfigurationChangeMessage do
+RSpec.describe Sap::Auditlog::SecurityMessage do
   describe "#initialize" do
-    let(:kind) { "configuration-changes" }
-    let(:object) do
-      {
-        type: "online system",
-        id: {
-          name: "Students info system",
-          configuration: "global-config"
-        }
-      }
-    end
+    let(:kind) { "security-events" }
+    let(:object) { "5 unsuccessful login attempts" }
     let(:subject) { described_class.new(object: object) }
 
-    it "constucts a 'configuration-changes' instance" do
+    it "constucts a 'security-events' instance" do
       expect(subject.kind).to eq kind
       expect(subject.object).to eq object
     end
   end
 
   describe "#payload" do
-    let(:object) { { type: "something", id: { jes: "box" } } }
+    let(:kind) { "security-events" }
+    let(:object) { "5 unsuccessful login attempts" }
     let(:subject) { described_class.new(object: object) }
-    let(:common_payload) { { mock: "common payload" } }
-    let(:attr1) { { name: "attr1" } }
-    let(:data_subject1) { { type: "test type", id: "test id" } }
 
+    let(:common_payload) { { mock: "common payload" } }
+    let(:data_subject1) { { type: "test type", id: "test id" } }
+    let(:ip) { "127.0.0.1" }
     before do
       allow(subject)
         .to receive(:common_payload)
@@ -35,7 +28,7 @@ RSpec.describe Sap::Auditlog::ConfigurationChangeMessage do
 
     it "has payload specific to its kind" do
       subject
-        .attribute!(attr1)
+        .external_ip!(ip)
         .data_subject!(data_subject1)
 
       expect(subject.payload).to eq(
@@ -43,8 +36,8 @@ RSpec.describe Sap::Auditlog::ConfigurationChangeMessage do
           {
             mock: "common payload",
             object: object,
-            attributes: [attr1],
-            data_subjects: [data_subject1]
+            data_subjects: [data_subject1],
+            ip: ip
           }
         )
       )

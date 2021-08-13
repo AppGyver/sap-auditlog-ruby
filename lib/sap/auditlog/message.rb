@@ -7,7 +7,7 @@ module Sap
     class Message
       class InvalidPayloadError < StandardError; end
 
-      attr_reader :errors, :kind, :object, :attributes, :data_subjects, :access_channel, :external_ip,
+      attr_reader :errors, :kind, :object, :attributes, :data_subjects, :access_channel,
                   :tenant, :by
 
       def initialize(kind:, object:)
@@ -59,12 +59,6 @@ module Sap
 
       def by!(actor)
         @by = actor
-
-        self
-      end
-
-      def external_ip!(ip)
-        @external_ip = ip
 
         self
       end
