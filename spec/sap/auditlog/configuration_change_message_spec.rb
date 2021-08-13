@@ -25,7 +25,7 @@ RSpec.describe Sap::Auditlog::ConfigurationChangeMessage do
     let(:subject) { described_class.new(object: object) }
     let(:common_payload) { { mock: "common payload" } }
     let(:attr1) { { name: "attr1" } }
-    let(:data_subject1) { { type: "test type", id: "test id" } }
+    let(:attr2) { { name: "attr2" } }
 
     before do
       allow(subject)
@@ -36,15 +36,14 @@ RSpec.describe Sap::Auditlog::ConfigurationChangeMessage do
     it "has payload specific to its kind" do
       subject
         .attribute!(attr1)
-        .data_subject!(data_subject1)
+        .attribute!(attr2)
 
       expect(subject.payload).to eq(
         MultiJson.dump(
           {
             mock: "common payload",
             object: object,
-            attributes: [attr1],
-            data_subjects: [data_subject1]
+            attributes: [attr1, attr2]
           }
         )
       )

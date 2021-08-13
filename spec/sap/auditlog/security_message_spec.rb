@@ -35,7 +35,7 @@ RSpec.describe Sap::Auditlog::SecurityMessage do
         MultiJson.dump(
           {
             mock: "common payload",
-            object: object,
+            data: object,
             data_subjects: [data_subject1],
             ip: ip
           }

@@ -17,9 +17,9 @@ module Sap
         MultiJson.dump(
           common_payload.merge(
             {
-              object: object,
+              data: object,
               data_subjects: data_subjects,
-              ip: external_ip,
+              ip: external_ip
             }
           )
         )

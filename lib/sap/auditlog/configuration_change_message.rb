@@ -16,8 +16,7 @@ module Sap
           common_payload.merge(
             {
               object: object,
-              attributes: attributes,
-              data_subjects: data_subjects
+              attributes: attributes
             }
           )
         )
