@@ -73,10 +73,6 @@ RSpec.describe Sap::Auditlog::Client do
         .to receive(:access_token)
         .and_return(access_token)
 
-      allow(subject)
-        .to receive(:json_payload)
-        .and_return(request_data)
-
       allow(response)
         .to receive(:success?)
         .and_return(true)
@@ -84,6 +80,10 @@ RSpec.describe Sap::Auditlog::Client do
       allow(SecureRandom)
         .to receive(:hex)
         .and_return(uuid)
+
+      allow(message)
+        .to receive(:payload)
+        .and_return(request_data)
 
       allow(Faraday)
         .to receive(:post)
@@ -93,7 +93,7 @@ RSpec.describe Sap::Auditlog::Client do
 
     it "dispatches request" do
       Timecop.freeze(fixed_time) do
-        expect(subject.request(message)).to eq response
+        expect(subject.dispatch(kind: message.kind, json: message.payload)).to eq response
       end
     end
   end

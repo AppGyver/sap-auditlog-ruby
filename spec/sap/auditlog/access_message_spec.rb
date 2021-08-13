@@ -42,7 +42,7 @@ RSpec.describe Sap::Auditlog::AccessMessage do
 
     describe "#payload" do
       let(:kind) { "asdf" }
-      let(:object) { { name: "something" } }
+      let(:object) { { type: "something", id: { jes: "box" } } }
       let(:subject) { described_class.new(object: object) }
       let(:common_payload) { { mock: "common payload" } }
       let(:attr1) { { name: "attr1" } }
@@ -66,14 +66,16 @@ RSpec.describe Sap::Auditlog::AccessMessage do
           .access_channel!(access_channel)
 
         expect(subject.payload).to eq(
-          {
-            mock: "common payload",
-            object: object,
-            attributes: [attr1],
-            data_subjects: [data_subject1],
-            attachments: [attachment1, attachment2],
-            channel: access_channel
-          }
+          MultiJson.dump(
+            {
+              mock: "common payload",
+              object: object,
+              attributes: [attr1],
+              data_subjects: [data_subject1],
+              attachments: [attachment1, attachment2],
+              channel: access_channel
+            }
+          )
         )
       end
     end

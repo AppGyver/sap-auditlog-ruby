@@ -8,11 +8,7 @@ require "time"
 module Sap
   module Auditlog
     class Client
-      class RequestFailure < StandardError; end
-
-      class InvalidMessageType < StandardError; end
-
-      class InvalidMessagePayload < StandardError; end
+      class DispatchError < StandardError; end
 
       attr_reader :service_url, :oauth_client, :logger, :xs_audit_org, :xs_audit_space, :xs_audit_app
 
@@ -25,11 +21,27 @@ module Sap
         @xs_audit_space = xs_audit_space
       end
 
-      def request(message)
-        raise InvalidMessageType unless message.is_a?(::Sap::Auditlog::Message)
-        raise InvalidMessagePayload, "Validation errors: #{message.errors}" unless message.valid?
+      def dispatch(kind:, json:)
+        response = Faraday.post(
+          api_url(service_url, kind),
+          json,
+          request_headers
+        )
 
-        dispatch(message)
+        unless response.success?
+          Rails.logger.error <<-ERROR.squish
+            Failed Auditlog post:
+            api: '#{api_url(service_url, kind)}',
+            xs_audit_org: '#{xs_audit_org}',
+            xs_audit_app: '#{xs_audit_app}',
+            xs_audit_space: '#{xs_audit_space}',
+            payload: '#{json}'
+          ERROR
+
+          raise DispatchError, "HTTP #{response.status} - Failed posting to SAP AuditLog: #{response.body}"
+        end
+
+        response
       end
 
       private
@@ -44,10 +56,6 @@ module Sap
         oauth_client.client_credentials.get_token
       end
 
-      def json_payload(message)
-        MultiJson.dump(message.payload)
-      end
-
       def request_headers
         {
           "User-Agent" => "SAP AppGyver Auditlog v#{Sap::Auditlog::VERSION}",
@@ -59,31 +67,8 @@ module Sap
         }
       end
 
-      def api_url(base_url, message)
-        [base_url, message.kind].join "/"
-      end
-
-      def dispatch(message)
-        response = Faraday.post(
-          api_url(service_url, message),
-          json_payload(message),
-          request_headers
-        )
-
-        unless response.success?
-          Rails.logger.error <<-ERROR.squish
-            Failed Auditlog post:
-            api: '#{api_url(service_url, message)}',
-            xs_audit_org: '#{xs_audit_org}',
-            xs_audit_app: '#{xs_audit_app}',
-            xs_audit_space: '#{xs_audit_space}',
-            payload: '#{json_payload(message)}'
-          ERROR
-
-          raise RequestFailure, "HTTP #{response.status} - Failed posting to SAP AuditLog: #{response.body}"
-        end
-
-        response
+      def api_url(base_url, api_name)
+        [base_url, api_name].join "/"
       end
     end
   end

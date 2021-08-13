@@ -14,14 +14,18 @@ module Sap
       end
 
       def payload
-        common_payload.merge(
-          {
-            object: object,
-            attributes: attributes,
-            data_subjects: data_subjects,
-            attachments: attachments,
-            channel: access_channel
-          }
+        raise InvalidPayloadError, "Validation errors: #{errors}" unless valid?
+
+        MultiJson.dump(
+          common_payload.merge(
+            {
+              object: object,
+              attributes: attributes,
+              data_subjects: data_subjects,
+              attachments: attachments,
+              channel: access_channel
+            }
+          )
         )
       end
 

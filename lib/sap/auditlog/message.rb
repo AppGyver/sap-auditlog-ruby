@@ -5,6 +5,8 @@ module Sap
     # See also
     # https://www.npmjs.com/package/@sap/audit-logging
     class Message
+      class InvalidPayloadError < StandardError; end
+
       attr_reader :errors, :kind, :object, :attributes, :data_subjects, :access_channel, :external_ip,
                   :tenant, :by
 
