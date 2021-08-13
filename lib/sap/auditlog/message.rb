@@ -78,6 +78,12 @@ module Sap
       def validation_error!(msg)
         @errors << msg
       end
+
+      def validate_common_object
+        validation_error!("Object is empty.") if @object.nil? || @object.empty?
+        validation_error!("Object :type missing.") if @object[:type].nil?
+        validation_error!("Object :id missing.") if @object[:id].nil?
+      end
     end
   end
 end

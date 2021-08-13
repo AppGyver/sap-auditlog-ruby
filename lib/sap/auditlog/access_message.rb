@@ -30,7 +30,7 @@ module Sap
       end
 
       def valid?
-        validate_object
+        validate_common_object
 
         validation_error! "Attributes cannot be empty." if @attributes.nil? || @attributes.empty?
         validation_error! "Data subjects cannot be empty." if @data_subjects.nil? || @data_subjects.empty?
@@ -52,14 +52,6 @@ module Sap
         @access_channel = name
 
         self
-      end
-
-      private
-
-      def validate_object
-        validation_error!("Object is empty.") if @object.nil? || @object.empty?
-        validation_error!("Object :type missing.") if @object[:type].nil?
-        validation_error!("Object :id missing.") if @object[:id].nil?
       end
     end
   end
