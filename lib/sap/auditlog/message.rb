@@ -34,8 +34,9 @@ module Sap
         raise ArgumentError, "Missing 'name' from 'attribute!' (Hash expected)" unless opts.is_a?(Hash) && opts[:name]
 
         msg = { name: opts[:name] }
-        msg[:old] = opts[:old] if opts[:old]
-        msg[:new] = opts[:new] if opts[:new]
+        msg[:old] = opts[:old] if opts.key?(:old)
+        msg[:new] = opts[:new] if opts.key?(:new)
+        msg[:successful] = opts[:successful] if opts.key?(:successful)
 
         @attributes << msg
 

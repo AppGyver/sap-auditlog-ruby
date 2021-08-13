@@ -81,20 +81,27 @@ RSpec.describe Sap::Auditlog::Message do
 
     context "chaining multiple attributes in a single call" do
       let(:attr_name2) { "second_attr" }
+      let(:attr_name3) { "third_attr" }
+      let(:attr_name4) { "fourth_attr" }
       let(:old_value2) { "second_old_value" }
-      let(:new_value2) { "second_new_value" }
+      let(:new_value2) { nil }
+      let(:old_value3) { nil }
 
       it "constructs one message for multiple attributes" do
         expect(subject.attributes).to be_empty
 
         subject
           .attribute!(name: attr_name, old: old_value, new: new_value)
-          .attribute!(name: attr_name2, old: old_value2, new: new_value2)
+          .attribute!(name: attr_name2, old: old_value2, new: new_value2, successful: false)
+          .attribute!(name: attr_name3, old: old_value3, successful: true)
+          .attribute!(name: attr_name4, successful: true)
 
         expect(subject.attributes).to eq(
           [
             { name: attr_name, old: old_value, new: new_value },
-            { name: attr_name2, old: old_value2, new: new_value2 }
+            { name: attr_name2, old: old_value2, new: new_value2, successful: false },
+            { name: attr_name3, old: old_value3, successful: true },
+            { name: attr_name4, successful: true }
           ]
         )
       end
