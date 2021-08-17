@@ -17,7 +17,7 @@ module Sap
         @data_subjects = []
         @errors = []
         @by = "$USER"
-        @tenant = "$PROVIDER"
+        @tenant = "$PROVIDER" # or "$SUBSCRIBER"
       end
 
       def common_payload
