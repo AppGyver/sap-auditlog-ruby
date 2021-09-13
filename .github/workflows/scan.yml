@@ -1,0 +1,29 @@
+on:
+  push:
+    branches:
+      - "master"
+
+jobs:
+  mirror-sap:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: mirror to github.tools.sap
+        run: |
+          git remote add sap "https://appgyver-public-gh-mirror-serviceuser:${{ secrets.MIRROR_SAP_TOKEN }}@github.tools.sap/AppGyver/sap-auditlog-ruby.git"
+          git push -f sap master
+  whitesource:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: build whitesource
+        run: docker build whitesource -t whitesource
+      - name: run whitesource
+        run: |
+          docker run \
+            -e WHITESOURCE_API_KEY=${{ secrets.WHITESOURCE_API_KEY }} \
+            -e WHITESOURCE_USER_KEY=${{ secrets.WHITESOURCE_USER_KEY }} \
+            -v $(pwd):/usr/src/app \
+            whitesource
