@@ -13,7 +13,7 @@ jobs:
       - name: mirror to github.tools.sap
         run: |
           git remote add sap "https://appgyver-public-gh-mirror-serviceuser:${{ secrets.MIRROR_SAP_TOKEN }}@github.tools.sap/AppGyver/sap-auditlog-ruby.git"
-          git push -f sap master
+          git push -f sap main
   whitesource:
     runs-on: ubuntu-latest
     steps:
