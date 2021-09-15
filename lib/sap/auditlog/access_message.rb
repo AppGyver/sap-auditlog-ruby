@@ -16,17 +16,23 @@ module Sap
       def payload
         raise InvalidPayloadError, "Validation errors: #{errors}" unless valid?
 
-        MultiJson.dump(
-          common_payload.merge(
-            {
-              object: object,
-              attributes: attributes,
-              data_subjects: data_subjects,
-              attachments: attachments,
-              channel: access_channel
-            }
-          )
+        payload = common_payload.merge(
+          {
+            object: object,
+            attributes: attributes
+          }
         )
+
+        payload.merge!(attachments: attachments) unless attachments.empty?
+        payload.merge!(channel: access_channel) if access_channel
+
+        if data_subjects.size == 1
+          payload.merge!(data_subject: data_subjects.first)
+        else
+          payload.merge!(data_subjects: data_subjects)
+        end
+
+        MultiJson.dump(payload)
       end
 
       def valid?

@@ -140,6 +140,12 @@ RSpec.describe Sap::Auditlog::Message do
         )
       end
 
+      it "constructs an Array data structure also with a single data_subject" do
+        subject.data_subject!(type: type1, id: id1)
+
+        expect(subject.data_subjects).to be_a Array
+      end
+
       context "chaining multiple data_subjects in a single call" do
         let(:type2) { "student2" }
         let(:id2) do
@@ -147,7 +153,7 @@ RSpec.describe Sap::Auditlog::Message do
         end
         let(:role2) { "foreign student 2" }
 
-        it "constructs one message for multiple data_subjects" do
+        it "constructs an array with multiple data_subjects hashes" do
           expect(subject.data_subjects).to be_empty
 
           subject
