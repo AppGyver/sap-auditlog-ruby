@@ -38,9 +38,9 @@ module Sap
       def valid?
         validate_common_object
 
-        validation_error! "Attributes cannot be empty." if @attributes.nil? || @attributes.empty?
-        validation_error! "Data subjects cannot be empty." if @data_subjects.nil? || @data_subjects.empty?
-        validation_error! "By cannot be empty." if @by.nil? || @by.empty?
+        validation_error! "#{self.class} Attributes cannot be empty." if @attributes.nil? || @attributes.empty?
+        validation_error! "#{self.class} Data subjects cannot be empty." if @data_subjects.nil? || @data_subjects.empty?
+        validation_error! "#{self.class} By cannot be empty." if @by.nil? || @by.empty?
 
         super
       end

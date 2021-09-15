@@ -36,6 +36,7 @@ module Sap
 
       def validate_data_subject
         validation_error! "#{self.class} can only have a single 'data_subject'" unless data_subjects.size == 1
+        validation_error! "#{self.class} Attributes cannot be empty." if @attributes.nil? || @attributes.empty?
       end
     end
   end
